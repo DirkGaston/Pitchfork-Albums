@@ -37,7 +37,7 @@
             class="mr-5"
             color="error"
             :disabled="!valid"
-            @click="RegisterUser"
+            @click="registerUser"
             >Register</v-btn
           >
           <v-btn color="error" @click="reset">Reset</v-btn>
@@ -48,6 +48,9 @@
 </template>
 
 <script>
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
 export default {
   data() {
     return {
@@ -59,18 +62,18 @@ export default {
         confirmPassword: "",
       },
       nameRules: [
-        // (v) => (v && !!v.trim() > 1) || "Write something, not just spaces",
+        (v) => (v && !!v.trim()) || "Write something, not just spaces",
         (v) => !!v || "Please type name",
         (v) => (v && v.length > 5) || "More than 6 characters required",
       ],
       emailRules: [
-        // (v) => (v && !!v.trim() > 1) || "Write something, not just spaces",
+        (v) => (v && !!v.trim()) || "Write something, not just spaces",
         (v) => !!v || "Please type email",
         (v) =>
           /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(v) || "Incorrect email format",
       ],
       passwordRules: [
-        // (v) => (v && !!v.trim() > 1) || "Write something, not just spaces",
+        (v) => (v && !!v.trim()) || "Write something, not just spaces",
         (v) => !!v || "Please type password",
         (v) => (v && v.length > 5) || "More than 6 characters required",
         (v) => (v && v.length < 12) || "Less than 12 characters required",
@@ -84,11 +87,19 @@ export default {
     };
   },
   methods: {
-    loginUser() {
-      console.log("Login user...");
+    async registerUser() {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          this.user.email,
+          this.user.password
+        );
+        console.log(userCredential);
+      } catch (error) {
+        console.log(error);
+      }
     },
     reset() {
-      console.log("reset...");
       this.$refs.formRegister.reset();
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app class="black" dark>
-      <v-btn color="red darken-4" to="/albums">
+      <v-btn color="red darken-4" to="/albumsnpm">
         <span class="mr-2">Albums</span>
         <v-icon>mdi-album</v-icon>
       </v-btn>
