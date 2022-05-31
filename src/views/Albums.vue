@@ -37,7 +37,7 @@
             <td>{{ album.data.title }}</td>
             <td>{{ album.data.score }}</td>
             <td class="text-center">
-              <v-btn class="mr-2" color="error" @click="deleteAlbum(albums.id)"
+              <v-btn class="mr-2" color="error" @click="deleteAlbum()"
                 >DELETE</v-btn
               >
               <v-btn color="warning" @click="activateUpdate(item)">EDIT</v-btn>
@@ -130,8 +130,8 @@ export default {
     },
     async deleteAlbum() {
       const db = getFirestore();
-      const { album } = this;
-      await deleteDoc(doc(db, "albums", album));
+      const { id } = this;
+      await deleteDoc(doc(db, "albums", id));
     },
     async getAlbums() {
       const db = getFirestore();

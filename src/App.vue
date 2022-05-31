@@ -1,25 +1,25 @@
 <template>
   <v-app>
     <v-app-bar color="black" class="hidden-sm-and-down" app dark>
-      <v-btn color="red darken-4" class="mr-2" to="/">
+      <v-btn color="red darken-4" class="mr-2" to="/" v-if="user">
         <span class="mr-2">Home</span>
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-btn color="red darken-4" to="/albums">
+      <v-btn color="red darken-4" to="/albums" v-if="user">
         <span class="mr-2">Albums</span>
         <v-icon>mdi-album</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
 
-      <v-btn color="red darken-4" class="mr-2" to="/register">
+      <v-btn color="red darken-4" class="mr-2" to="/register" v-if="!user">
         <span class="mr-2">Register</span>
         <v-icon>mdi-account-plus</v-icon>
       </v-btn>
-      <v-btn color="red darken-4" class="mr-2" to="/login">
+      <v-btn color="red darken-4" class="mr-2" to="/login" v-if="!user">
         <span class="mr-2">Login</span>
         <v-icon>mdi-login</v-icon>
       </v-btn>
-      <v-btn color="red darken-4">
+      <v-btn color="red darken-4" v-if="user" @click="cerrarSesion">
         <span class="mr-2">Logout</span>
         <v-icon>mdi-logout</v-icon>
       </v-btn>
@@ -107,11 +107,15 @@
 </template>
 
 <script>
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./firebase";
+
 export default {
   name: "App",
 
   data() {
     return {
+      user: null,
       menu: [
         { icon: "mdi-account-plus", title: "Register", link: "/register" },
         { icon: "mdi-login", title: "Login", link: "/login" },
@@ -122,9 +126,19 @@ export default {
     };
   },
 
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
+  },
+
   methods: {
     menuItems() {
       return this.menu;
+    },
+    async cerrarSesion() {
+      await signOut(auth);
+      this.$router.push({ name: "login" });
     },
   },
   computed: {

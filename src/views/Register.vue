@@ -95,8 +95,14 @@ export default {
           this.user.password
         );
         console.log(userCredential);
+        this.$router.push({ name: "login" });
       } catch (error) {
-        console.log(error);
+        console.log(error.code);
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            alert("El correo ya está siendo utilizado");
+            break;
+        }
       }
     },
     reset() {
