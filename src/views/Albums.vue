@@ -93,6 +93,7 @@ export default {
         artist: "",
         title: "",
         score: "",
+        uid: "",
       },
       dialog: false,
     };

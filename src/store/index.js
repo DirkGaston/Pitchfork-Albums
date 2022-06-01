@@ -9,7 +9,7 @@ import {
   onSnapshot,
   query,
   updateDoc,
-  // where,
+  where,
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
@@ -39,8 +39,8 @@ export default new Vuex.Store({
     async get_albums({ commit }) {
       try {
         const q = query(
-          collection(db, "albums")
-          // where("uid", "==", auth.currentUser.uid)
+          collection(db, "albums"),
+          where("uid", "==", auth.currentUser.uid)
         );
         onSnapshot(q, (querySnapshot) => {
           const albums = [];
@@ -64,6 +64,7 @@ export default new Vuex.Store({
           artist: album.artist,
           title: album.title,
           score: album.score,
+          uid: auth.currentUser.uid,
         });
       } catch (error) {
         console.log(error);
